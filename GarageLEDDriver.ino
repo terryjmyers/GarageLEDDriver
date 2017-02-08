@@ -11,7 +11,7 @@ Uses PWM library to alter standard arduino library from 600hz to 120hz increasin
 
 
 v1.0 Terry Myers
-
+v2.0 Added Serial help menu and fixed a bug that wasn't obeying the timeout time
 
 */
 
@@ -220,6 +220,7 @@ void loop() {
 
   //Read inputs
 	bool DIMotion = digitalRead(DIMotionPIN);
+	//bool DIMotion = manualmotion;
 	bool DIPowerOnRelay = digitalRead(DIPowerOnRelayPIN);
 
 	//If motion is detected
@@ -239,11 +240,11 @@ void loop() {
 		}
 		DIMotionOnREM = false;
 	}
-
+	/*
 	//If manual motion is triggered
 	if (manualmotion) { //If motion is detected
 		if (!DIManualMotionOnREM) { // a one shot, turn lights on and reset the Timeout Timer
-			PWMOutSP = MaxBrightness; //turn lights on
+			PWMOutSP = MaxBrightness; //turn lights o n
 			TimeoutTimer = 0;
 			TimeoutTime = TimeoutTimeTest;
 			DIManualMotionOnREM = true;
@@ -257,7 +258,7 @@ void loop() {
 		}
 		DIManualMotionOnREM = false;
 	}
-
+	*/
 	//If the light switch is turned on
 	if (DIPowerOnRelay) {
 		if (!DIRelayOnREM) { // a one shot, turn lights on and reset the Timeout Timer
@@ -279,7 +280,7 @@ void loop() {
 	//If either input is on run the timeout timer
 	if (PWMOutSP > 0.0 && _1000ms.pulse) { TimeoutTimer++; }//Run the timeout timer}
 
-	if (PWMOutSP > 0.0 && TimeoutTimer >= TimeoutTime) { PWMOutSP = 0.0; manualoutput = 0.0; }//if the lights are on and the timeout timer has finished, turn them off
+	if (PWMOutSP > 0.0 && TimeoutTimer >= TimeoutTime) { Serial.println("here");  PWMOutSP = 0.0; manualoutput = 0.0; }//if the lights are on and the timeout timer has finished, turn them off
 
 	PWMOutACT = Dimmer.tick(PWMOutSP); //Create dimmer effect
 	if (manualoutput > 0) { PWMOutACT = manualoutput; }
